@@ -9,6 +9,8 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import Navabar from "./components/Navbar/Navabar";
 import Home from "./components/Home/Home";
 import Error from "./components/Error/Error";
+import TaskList from "./components/Tasks/TaskList";
+import TaskDetail from "./components/Tasks/TaskDetail";
 
 export default function App() {
   return (
@@ -24,6 +26,8 @@ export default function App() {
 
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/tasks" element={<TaskList />} />
+          <Route path="/tasks/:taskId" element={<TaskDetail />} />
         </Route>
       </Routes>
     </BrowserRouter>
