@@ -1,0 +1,142 @@
+/* Auth.module.css */
+
+.authContainer {
+    max-width: 600px;
+    margin: 0 auto;
+    margin-top: 100px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #eff2f7;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.authTitle {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    color: #0056b3;
+}
+
+.formGroup {
+    margin-bottom: 5px;
+}
+
+.formLabel {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.formInput {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 8px;
+    border: 1px solid #bbb;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.submitButton {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submitButton:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+}
+
+.submitButton:hover:enabled {
+    background-color: #0056b3;
+}
+
+.messageText {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.errorText {
+    color: #ff4d4f;
+}
+
+.successText {
+    color: #28a745;
+}
+
+.authLink {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.authLink:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .authContainer {
+        max-width: 90%;
+        padding: 15px;
+        margin-top: 50px;
+    }
+
+    .authTitle {
+        font-size: 24px;
+    }
+
+    .formInput {
+        padding: 10px;
+    }
+
+    .submitButton {
+        padding: 10px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .authContainer {
+        max-width: 95%;
+        margin-top: 100px;
+        padding: 10px;
+    }
+
+    .authTitle {
+        font-size: 20px;
+    }
+
+    .formGroup {
+        margin-bottom: 10px;
+    }
+
+    .formLabel {
+        font-size: 14px;
+    }
+
+    .formInput {
+        padding: 8px;
+    }
+
+    .submitButton {
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    .messageText {
+        font-size: 12px;
+    }
+}
