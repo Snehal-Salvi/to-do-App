@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
 import { errorHandler } from "../middleware/errorHandler.js";
+import nodemailer from 'nodemailer';
 
 // Register User
 export const registerUser = async (req, res, next) => {
@@ -48,6 +49,7 @@ export const loginUser = async (req, res, next) => {
       expiresIn: "1h",
     });
 
+    // Send token and user info in response
     const userInfo = {
       userId: user._id,
       username: user.username,
@@ -63,4 +65,88 @@ export const loginUser = async (req, res, next) => {
   }
 };
 
+// Request Password Reset - Send OTP
+export const forgotPassword = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
 
+    if (!user) {
+      throw errorHandler(404, "User with this email not found");
+    }
+
+    // Generate OTP and set expiration time (1 hour)
+    const otp = generateOTP();
+    const otpExpires = Date.now() + 3600000; // 1 hour
+
+    // Update user with OTP and expiration
+    user.resetPasswordOTP = otp;
+    user.resetPasswordExpires = otpExpires;
+    await user.save();
+
+    // Configure Nodemailer transporter
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USERNAME,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+
+    // Email options
+    const mailOptions = {
+      from: process.env.EMAIL_USERNAME,
+      to: user.email,
+      subject: "Password Reset OTP",
+      text: `Your password reset OTP is ${otp}. It is valid for 1 hour.`,
+    };
+
+    // Send email with OTP
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        return next(error);
+      }
+      res.status(200).json({ message: "OTP sent to your email address" });
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Reset Password using OTP
+export const resetPassword = async (req, res, next) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+    const user = await User.findOne({ email }); 
+
+    if (!user) {
+      throw errorHandler(404, "User not found");
+    }
+
+    // Check if OTP is valid and not expired
+    if (
+      user.resetPasswordOTP !== otp ||
+      Date.now() > user.resetPasswordExpires
+    ) {
+      throw errorHandler(400, "Invalid or expired OTP");
+    }
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update the user's password and clear the OTP fields
+    user.password = hashedPassword;
+    user.resetPasswordOTP = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    res.status(200).json({ message: "Password reset successful" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Generate OTP function
+const generateOTP = () => {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+};

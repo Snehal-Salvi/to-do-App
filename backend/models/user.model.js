@@ -18,6 +18,9 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+
+    resetPasswordOTP: { type: String },
+    resetPasswordExpires: { type: Date },
   },
   { timestamps: true }
 );
