@@ -9,6 +9,10 @@ Taskly is a task management application built using React.js and integrated with
 ## 📸 Application Demo
 
 
+https://github.com/Snehal-Salvi/to-do-App/assets/125987932/7171d547-cb97-42f6-b097-37a567bf24a3
+
+
+
 ## 📝 Backend Documentation
 
 For more information on backend setup and usage, please refer to the [Backend README](/backend/README.md).
