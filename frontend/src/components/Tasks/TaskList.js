@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { BACKEND_URL } from "../../utils/constants";
-import styles from "./Task.module.css";  
+import styles from "./Task.module.css";
 import AddTask from "./AddTask";
+import EditTask from "./EditTask";
+import DeleteTask from "./DeleteTask";
 import { BiTask } from "react-icons/bi";
-import { MdAddCard } from "react-icons/md";
+import { MdAddCard, MdModeEdit } from "react-icons/md";
 import { Card } from "react-bootstrap";
-import { MdModeEdit } from "react-icons/md";
-import { MdDelete } from "react-icons/md";
 import { BsClockFill } from "react-icons/bs";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function TaskList() {
   const [tasks, setTasks] = useState([]);
+  const [selectedTask, setSelectedTask] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     fetchTasks();
@@ -35,8 +39,6 @@ export default function TaskList() {
     }
   };
 
-  const [showModal, setShowModal] = useState(false);
-
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
 
@@ -56,15 +58,66 @@ export default function TaskList() {
       }
 
       fetchTasks();
-
       handleCloseModal();
+      toast.success("Task added successfully!");
     } catch (error) {
       console.error("Error adding task:", error);
     }
   };
 
+  const handleEditTask = async (taskId, updatedTask) => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/tasks/${taskId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(updatedTask),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update task");
+      }
+
+      fetchTasks();
+      setSelectedTask(null); // Clear selected task after editing
+    } catch (error) {
+      console.error("Error updating task:", error);
+    }
+  };
+
+  const handleDeleteTask = async (taskId) => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/tasks/${taskId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `${localStorage.getItem("token")}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete task");
+      }
+
+      fetchTasks();
+      toast.success("Task deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    }
+  };
+
+  const handleEditButtonClick = (task) => {
+    setSelectedTask(task);
+  };
+
+  const handleCancelEdit = () => {
+    setSelectedTask(null);
+  };
+
   return (
     <div className={styles.taskContainer}>
+      <ToastContainer />
       <div className={styles.header}>
         <h2>
           {" "}
@@ -89,22 +142,40 @@ export default function TaskList() {
               <Card.Body>
                 <div className={styles.cardHeader}>
                   <div className={styles.cardTitle}>
-                    <BiTask /> {task.title.toUpperCase()}
+                    {selectedTask && selectedTask._id === task._id ? (
+                      <EditTask
+                        task={selectedTask}
+                        onSave={handleEditTask}
+                        onCancel={handleCancelEdit}
+                      />
+                    ) : (
+                      <span>
+                        <BiTask /> {task.title.toUpperCase()}
+                      </span>
+                    )}
                   </div>
                   <div className={styles.cardStatus}>
-                    <span><BsClockFill style={{ margin: "5px" }}/> {task.status}</span>
+                    <span>
+                      <BsClockFill style={{ margin: "5px" }} /> {task.status}
+                    </span>
                   </div>
-
                   <div className={styles.cardActions}>
-                    <button className={styles.editButton}>
-                      <MdModeEdit />
-                    </button>
-                    <button className={styles.deleteButton}>
-                      <MdDelete />
-                    </button>
+                    {!selectedTask || selectedTask._id !== task._id ? (
+                      <>
+                        <button
+                          className={styles.editButton}
+                          onClick={() => handleEditButtonClick(task)}
+                        >
+                          <MdModeEdit />
+                        </button>
+                        <DeleteTask
+                          taskId={task._id}
+                          onDelete={handleDeleteTask}
+                        />
+                      </>
+                    ) : null}
                   </div>
                 </div>
-
                 <div className={styles.cardDescription}>
                   <p>Description: {task.description}</p>
                 </div>
