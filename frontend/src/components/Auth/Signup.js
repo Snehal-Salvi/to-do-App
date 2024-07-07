@@ -4,6 +4,7 @@ import { BACKEND_URL } from "../../utils/constants";
 import styles from "./Auth.module.css";
 
 export default function Signup() {
+  // State variables
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -14,6 +15,7 @@ export default function Signup() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
+  // Handle form input changes
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData((prevFormData) => ({
@@ -22,11 +24,13 @@ export default function Signup() {
     }));
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setErrors([]);
 
+    // Validate password match
     if (formData.password !== formData.confirmPassword) {
       setErrors(["Passwords do not match"]);
       setIsLoading(false);
@@ -34,6 +38,7 @@ export default function Signup() {
     }
 
     try {
+      // Attempt to register user
       const response = await fetch(`${BACKEND_URL}/api/register`, {
         method: "POST",
         headers: {
@@ -43,12 +48,14 @@ export default function Signup() {
       });
 
       if (!response.ok) {
+        // Handle registration errors
         const errorData = await response.json();
         const receivedErrors = errorData.errors || [];
         setErrors(receivedErrors.map((error) => error.msg));
         throw new Error("Registration failed");
       }
 
+      // Clear errors and navigate on successful registration
       setErrors([]);
       setIsLoading(false);
       navigate("/signin");
@@ -60,8 +67,10 @@ export default function Signup() {
 
   return (
     <div className={styles.authContainer}>
+      {/* Sign Up form */}
       <h2 className={styles.authTitle}>Sign Up</h2>
       <form onSubmit={handleSubmit}>
+        {/* Username input */}
         <div className={styles.formGroup}>
           <label htmlFor="username" className={styles.formLabel}>
             Username
@@ -76,6 +85,7 @@ export default function Signup() {
             required
           />
         </div>
+        {/* Email input */}
         <div className={styles.formGroup}>
           <label htmlFor="email" className={styles.formLabel}>
             Email
@@ -90,6 +100,7 @@ export default function Signup() {
             required
           />
         </div>
+        {/* Password input */}
         <div className={styles.formGroup}>
           <label htmlFor="password" className={styles.formLabel}>
             Password
@@ -104,6 +115,7 @@ export default function Signup() {
             required
           />
         </div>
+        {/* Confirm Password input */}
         <div className={styles.formGroup}>
           <label htmlFor="confirmPassword" className={styles.formLabel}>
             Confirm Password
@@ -118,6 +130,7 @@ export default function Signup() {
             required
           />
         </div>
+        {/* Submit button */}
         <button
           type="submit"
           className={styles.submitButton}
@@ -126,6 +139,7 @@ export default function Signup() {
           {isLoading ? "Signing up..." : "Sign Up"}
         </button>
 
+        {/* Sign In link */}
         <p className={styles.messageText}>
           Already have an account?{" "}
           <Link to="/signin" className={styles.authLink}>
@@ -134,6 +148,7 @@ export default function Signup() {
         </p>
       </form>
 
+      {/* Display errors if any */}
       {errors.length > 0 && (
         <div className="alert alert-danger mt-3" role="alert">
           {errors.map((error, index) => (

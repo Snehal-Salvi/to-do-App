@@ -4,11 +4,13 @@ import { BACKEND_URL } from "../../utils/constants";
 import styles from "./Auth.module.css";
 
 export default function Signin() {
+  // State variables
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
+  // Handle form input changes
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData((prevFormData) => ({
@@ -17,12 +19,14 @@ export default function Signin() {
     }));
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setMessage("");
 
     try {
+      // Attempt to log in user
       const response = await fetch(`${BACKEND_URL}/api/login`, {
         method: "POST",
         headers: {
@@ -32,14 +36,16 @@ export default function Signin() {
       });
 
       if (!response.ok) {
+        // Handle login errors
         const errorData = await response.json();
         throw new Error(errorData.error?.message || "Login failed");
       }
 
+      // Store token and user data on successful login
       const { token, user } = await response.json();
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
-      navigate("/tasks");
+      navigate("/tasks"); // Redirect to tasks page
     } catch (error) {
       setMessage(`Error: ${error.message}`);
     } finally {
@@ -49,8 +55,10 @@ export default function Signin() {
 
   return (
     <div className={styles.authContainer}>
+      {/* Sign In form */}
       <h2 className={styles.authTitle}>Sign In</h2>
       <form onSubmit={handleSubmit}>
+        {/* Email input */}
         <div className={styles.formGroup}>
           <label htmlFor="email" className={styles.formLabel}>
             Email
@@ -65,6 +73,7 @@ export default function Signin() {
             required
           />
         </div>
+        {/* Password input */}
         <div className={styles.formGroup}>
           <label htmlFor="password" className={styles.formLabel}>
             Password
@@ -79,6 +88,7 @@ export default function Signin() {
             required
           />
         </div>
+        {/* Submit button */}
         <button
           type="submit"
           className={styles.submitButton}
@@ -88,12 +98,14 @@ export default function Signin() {
         </button>
       </form>
 
+      {/* Display message (error or success) */}
       {message && (
         <div className={`alert ${message.startsWith("Error") ? "alert-danger" : "alert-success"} mt-3`} role="alert">
           {message}
         </div>
       )}
 
+      {/* Forgot password link */}
       <p className={styles.messageText}>
         Forgot your password?{" "}
         <Link to="/forgot-password" className={styles.authLink}>
@@ -101,6 +113,7 @@ export default function Signin() {
         </Link>
       </p>
       <hr />
+      {/* Sign Up link */}
       <p className={styles.messageText}>
         Don't have an account?{" "}
         <Link to="/signup" className={styles.authLink}>

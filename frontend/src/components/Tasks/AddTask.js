@@ -8,6 +8,7 @@ export default function AddTask({ show, handleClose, handleAddTask }) {
     status: "To Do",
   });
 
+  // Function to handle form input changes
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData((prevFormData) => ({
@@ -16,11 +17,12 @@ export default function AddTask({ show, handleClose, handleAddTask }) {
     }));
   };
 
+  // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
   
     try {
-      await handleAddTask(formData);
+      await handleAddTask(formData); // Call parent function to add task
   
       // Clear the form fields after adding the task
       setFormData({

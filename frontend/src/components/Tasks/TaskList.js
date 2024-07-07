@@ -20,6 +20,7 @@ export default function TaskList() {
     fetchTasks();
   }, []);
 
+  // Function to fetch tasks from backend
   const fetchTasks = async () => {
     try {
       const response = await fetch(`${BACKEND_URL}/api/tasks`, {
@@ -39,9 +40,13 @@ export default function TaskList() {
     }
   };
 
+  // Function to show the modal for adding a task
   const handleShowModal = () => setShowModal(true);
+
+  // Function to close the modal for adding a task
   const handleCloseModal = () => setShowModal(false);
 
+  // Function to add a new task
   const handleAddTask = async (newTask) => {
     try {
       const response = await fetch(`${BACKEND_URL}/api/tasks`, {
@@ -57,14 +62,15 @@ export default function TaskList() {
         throw new Error("Failed to add task");
       }
 
-      fetchTasks();
-      handleCloseModal();
-      toast.success("Task added successfully!");
+      fetchTasks(); // Refresh tasks after adding
+      handleCloseModal(); // Close add task modal
+      toast.success("Task added successfully!"); // Show success toast
     } catch (error) {
       console.error("Error adding task:", error);
     }
   };
 
+  // Function to handle editing a task
   const handleEditTask = async (taskId, updatedTask) => {
     try {
       const response = await fetch(`${BACKEND_URL}/api/tasks/${taskId}`, {
@@ -80,13 +86,14 @@ export default function TaskList() {
         throw new Error("Failed to update task");
       }
 
-      fetchTasks();
+      fetchTasks(); // Refresh tasks after editing
       setSelectedTask(null); // Clear selected task after editing
     } catch (error) {
       console.error("Error updating task:", error);
     }
   };
 
+  // Function to handle deleting a task
   const handleDeleteTask = async (taskId) => {
     try {
       const response = await fetch(`${BACKEND_URL}/api/tasks/${taskId}`, {
@@ -100,24 +107,26 @@ export default function TaskList() {
         throw new Error("Failed to delete task");
       }
 
-      fetchTasks();
-      toast.success("Task deleted successfully!");
+      fetchTasks(); // Refresh tasks after deleting
+      toast.success("Task deleted successfully!"); // Show success toast
     } catch (error) {
       console.error("Error deleting task:", error);
     }
   };
 
+  // Function to handle clicking edit button for a task
   const handleEditButtonClick = (task) => {
-    setSelectedTask(task);
+    setSelectedTask(task); // Set selected task for editing
   };
 
+  // Function to cancel editing a task
   const handleCancelEdit = () => {
-    setSelectedTask(null);
+    setSelectedTask(null); // Clear selected task for editing
   };
 
   return (
     <div className={styles.taskContainer}>
-      <ToastContainer />
+      <ToastContainer /> {/* Toast container for notifications */}
       <div className={styles.header}>
         <h2>
           {" "}
@@ -129,6 +138,7 @@ export default function TaskList() {
         </button>
       </div>
 
+      {/* Modal for adding a task */}
       <AddTask
         show={showModal}
         handleClose={handleCloseModal}
@@ -136,12 +146,14 @@ export default function TaskList() {
       />
 
       <div className="row">
+        {/* Displaying each task */}
         {tasks.map((task) => (
           <div key={task._id} className=" mb-4">
             <Card className={styles.taskCard}>
               <Card.Body>
                 <div className={styles.cardHeader}>
                   <div className={styles.cardTitle}>
+                    {/* Conditionally rendering edit task form or task title */}
                     {selectedTask && selectedTask._id === task._id ? (
                       <EditTask
                         task={selectedTask}
@@ -160,6 +172,7 @@ export default function TaskList() {
                     </span>
                   </div>
                   <div className={styles.cardActions}>
+                    {/* Conditionally rendering edit and delete buttons */}
                     {!selectedTask || selectedTask._id !== task._id ? (
                       <>
                         <button

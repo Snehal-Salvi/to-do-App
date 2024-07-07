@@ -1,6 +1,7 @@
 import React from "react";
 import { Outlet, Navigate } from "react-router-dom";
 
+//Private Route
 export default function PrivateRoute() {
   const currentUser = localStorage.getItem("token");
 

@@ -1,4 +1,3 @@
-// EditTask.js
 import React, { useState } from "react";
 import styles from "./Task.module.css";
 import { FaSave } from "react-icons/fa";
@@ -7,22 +6,26 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function EditTask({ task, onSave, onCancel }) {
+  // State to manage edited task details
   const [editedTask, setEditedTask] = useState({
     title: task.title,
     description: task.description,
     status: task.status,
   });
 
+  // Options for task status
   const statusOptions = ["To Do", "In Progress", "Done"];
 
+  // Function to handle save button click
   const handleSave = () => {
-    onSave(task._id, editedTask);
-    toast.success("Task updated successfully!");
+    onSave(task._id, editedTask); // Call parent function to save edited task
+    toast.success("Task updated successfully!"); // Show success toast notification
   };
 
   return (
     <div className={styles.taskCard}>
       <ToastContainer />
+      {/* Editable task title and status */}
       <div className={styles.cardHeader}>
         <input
           type="text"
@@ -39,6 +42,7 @@ export default function EditTask({ task, onSave, onCancel }) {
           }
           className={`${styles.cardStatus} ${styles.editSelect}`}
         >
+          {/* Dropdown options for task status */}
           {statusOptions.map((option) => (
             <option key={option} value={option}>
               {option}
@@ -46,6 +50,7 @@ export default function EditTask({ task, onSave, onCancel }) {
           ))}
         </select>
       </div>
+      {/* Editable task description */}
       <textarea
         className={`${styles.cardDescription} ${styles.editDescription}`}
         value={editedTask.description}
@@ -53,16 +58,15 @@ export default function EditTask({ task, onSave, onCancel }) {
           setEditedTask({ ...editedTask, description: e.target.value })
         }
       />
+      {/* Buttons to save or cancel editing */}
       <div className={styles.cardActions}>
         <button className={styles.saveButton} onClick={handleSave}>
-          <FaSave />
+          <FaSave /> {/* Save icon */}
         </button>
         <button className={styles.cancelButton} onClick={onCancel}>
-          <MdCancel />
+          <MdCancel /> {/* Cancel icon */}
         </button>
       </div>
     </div>
   );
 }
-
- 
