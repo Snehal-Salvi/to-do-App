@@ -2,6 +2,8 @@ import mongoose from 'mongoose';
 
 const { Schema, model } = mongoose;
 
+//  Schema for the Task model
+
 const taskSchema = new Schema(
   {
     title: {

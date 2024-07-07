@@ -8,14 +8,18 @@ import { verifyToken } from "./middleware/verifyToken.js";
 const app = express();
 const PORT = process.env.PORT || 3002;
 
+// Connect to MongoDB database
 connectToDb();
 
-app.use(express.json());
-app.use(cors());
+// Middleware setup
+app.use(express.json()); // Parse incoming JSON requests
+app.use(cors()); // Enable Cross-Origin Resource Sharing (CORS)
 
-app.use("/api", userRoutes);
-app.use('/api', verifyToken, taskRoutes);
+// API routes setup
+app.use("/api", userRoutes); // User-related routes
+app.use('/api', verifyToken, taskRoutes); // Task-related routes protected by token verification
 
+// Error handling middleware
 app.use((err, req, res, next) => {
   if (!err.statusCode) {
     err.statusCode = 500;
@@ -28,10 +32,12 @@ app.use((err, req, res, next) => {
   });
 });
 
+// Default route
 app.get("/", (req, res) => {
   res.send("Welcome to my App!");
 });
 
+// Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

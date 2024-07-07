@@ -7,61 +7,70 @@ import nodemailer from 'nodemailer';
 // Register User
 export const registerUser = async (req, res, next) => {
   try {
+    // Check if user already exists
     const existingUser = await User.findOne({ email: req.body.email });
     if (existingUser) {
       throw errorHandler(400, "Email already exists");
     }
 
+    // Hash the password
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
+    // Create a new user
     const newUser = new User({
       username: req.body.username,
       email: req.body.email,
       password: hashedPassword,
     });
 
+    // Save the new user to the database
     await newUser.save();
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
-    next(error);
+    next(error); 
   }
 };
 
 // Login User
 export const loginUser = async (req, res, next) => {
   try {
+    // Find user by email
     const user = await User.findOne({ email: req.body.email });
 
+    // If user not found, throw error
     if (!user) {
       throw errorHandler(401, "Invalid credentials");
     }
 
+    // Compare passwords
     const passwordMatch = await bcrypt.compare(
       req.body.password,
       user.password
     );
 
+    // If passwords do not match, throw error
     if (!passwordMatch) {
       throw errorHandler(401, "Invalid credentials");
     }
 
+    // Generate JWT token
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
 
-    // Send token and user info in response
+    // Construct user info object to send in response
     const userInfo = {
       userId: user._id,
       username: user.username,
       email: user.email,
-
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     };
 
+    // Send token and user info in response
     res.status(200).json({ token, user: userInfo });
   } catch (error) {
-    next(error);
+    next(error); 
   }
 };
 
@@ -71,6 +80,7 @@ export const forgotPassword = async (req, res, next) => {
     const { email } = req.body;
     const user = await User.findOne({ email });
 
+    // If user not found, throw error
     if (!user) {
       throw errorHandler(404, "User with this email not found");
     }
@@ -104,12 +114,12 @@ export const forgotPassword = async (req, res, next) => {
     // Send email with OTP
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        return next(error);
+        return next(error); 
       }
       res.status(200).json({ message: "OTP sent to your email address" });
     });
   } catch (error) {
-    next(error);
+    next(error); 
   }
 };
 
@@ -117,8 +127,9 @@ export const forgotPassword = async (req, res, next) => {
 export const resetPassword = async (req, res, next) => {
   try {
     const { email, otp, newPassword } = req.body;
-    const user = await User.findOne({ email }); 
+    const user = await User.findOne({ email });
 
+    // If user not found, throw error
     if (!user) {
       throw errorHandler(404, "User not found");
     }
@@ -142,7 +153,7 @@ export const resetPassword = async (req, res, next) => {
 
     res.status(200).json({ message: "Password reset successful" });
   } catch (error) {
-    next(error);
+    next(error); 
   }
 };
 

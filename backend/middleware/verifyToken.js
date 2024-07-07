@@ -1,7 +1,12 @@
-// Middleware to verify JWT token
 import jwt from "jsonwebtoken";
-import { errorHandler } from "../middleware/errorHandler.js";  
+import { errorHandler } from "../middleware/errorHandler.js";
 
+/*
+Token Verification Middleware
+Verifies the JWT token from the request headers.
+Sets decoded user information in req.user if token is valid.
+Sends 401 Unauthorized error if token is missing or invalid.
+ */
 export const verifyToken = (req, res, next) => {
   const token = req.headers["authorization"];
 
