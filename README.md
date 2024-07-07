@@ -4,7 +4,7 @@ Taskly is a task management application built using React.js and integrated with
 
 ## 🚀 Deployment Link:
 
-[Taskly]()
+[Taskly](https://668ae61b3756a837d6160ef8--brilliant-babka-2bcbf0.netlify.app)
 
 ## 📸 Application Demo
 

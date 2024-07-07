@@ -2,8 +2,6 @@
 
 This is a backend application for a real-time chat system built with Express.js, Socket.io, and MongoDB.
 
-![Signup Route](../backend/assets/Signup.png)
-
 ## 🛠️ Installation
 
 To run this project locally, follow these steps:

@@ -1,1 +1,1 @@
-export const BACKEND_URL = "http://localhost:3002"
+export const BACKEND_URL = "https://to-do-app-4rlf.onrender.com"
