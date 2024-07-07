@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { BACKEND_URL } from "../../utils/constants";
-import styles from "./Task.module.css"; // Import CSS modules styles
+import styles from "./Task.module.css";  
 import AddTask from "./AddTask";
+import { BiTask } from "react-icons/bi";
+import { MdAddCard } from "react-icons/md";
+import { Card } from "react-bootstrap";
+import { MdModeEdit } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
+import { BsClockFill } from "react-icons/bs";
 
 export default function TaskList() {
   const [tasks, setTasks] = useState([]);
@@ -50,10 +55,8 @@ export default function TaskList() {
         throw new Error("Failed to add task");
       }
 
-      // Optionally refetch tasks to update the list from the backend
       fetchTasks();
 
-      // Close the modal
       handleCloseModal();
     } catch (error) {
       console.error("Error adding task:", error);
@@ -62,24 +65,54 @@ export default function TaskList() {
 
   return (
     <div className={styles.taskContainer}>
-      <h2>Tasks</h2>
-      <button variant="primary" onClick={handleShowModal}>
-        Add Task
-      </button>
+      <div className={styles.header}>
+        <h2>
+          {" "}
+          <BiTask /> Taskly List
+        </h2>
+        <button className={styles.addButton} onClick={handleShowModal}>
+          <MdAddCard style={{ margin: "5px" }} />
+          Add Task
+        </button>
+      </div>
 
-      <AddTask show={showModal} handleClose={handleCloseModal} handleAddTask={handleAddTask} />
-      
-      <ul className={styles.taskList}>
+      <AddTask
+        show={showModal}
+        handleClose={handleCloseModal}
+        handleAddTask={handleAddTask}
+      />
+
+      <div className="row">
         {tasks.map((task) => (
-          <li key={task._id} className={styles.taskItem}>
-            <Link to={`/tasks/${task._id}`} className={styles.taskLink}>
-              <div className={styles.taskTitle}>{task.title}</div>
-              <div className={styles.taskDescription}>{task.description}</div>
-              <div className={styles.taskStatus}>{task.status}</div>
-            </Link>
-          </li>
+          <div key={task._id} className=" mb-4">
+            <Card className={styles.taskCard}>
+              <Card.Body>
+                <div className={styles.cardHeader}>
+                  <div className={styles.cardTitle}>
+                    <BiTask /> {task.title.toUpperCase()}
+                  </div>
+                  <div className={styles.cardStatus}>
+                    <span><BsClockFill style={{ margin: "5px" }}/> {task.status}</span>
+                  </div>
+
+                  <div className={styles.cardActions}>
+                    <button className={styles.editButton}>
+                      <MdModeEdit />
+                    </button>
+                    <button className={styles.deleteButton}>
+                      <MdDelete />
+                    </button>
+                  </div>
+                </div>
+
+                <div className={styles.cardDescription}>
+                  <p>Description: {task.description}</p>
+                </div>
+              </Card.Body>
+            </Card>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

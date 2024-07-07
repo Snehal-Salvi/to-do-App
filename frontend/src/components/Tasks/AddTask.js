@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Button } from "react-bootstrap"; // Assuming you are using Bootstrap for modals
+import { Modal, Button } from "react-bootstrap";  
 
 export default function AddTask({ show, handleClose, handleAddTask }) {
   const [formData, setFormData] = useState({
@@ -18,14 +18,22 @@ export default function AddTask({ show, handleClose, handleAddTask }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       await handleAddTask(formData);
+  
+      // Clear the form fields after adding the task
+      setFormData({
+        title: "",
+        description: "",
+        status: "To Do",
+      });
+  
     } catch (error) {
       console.error("Error adding task:", error);
     }
   };
-
+  
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>

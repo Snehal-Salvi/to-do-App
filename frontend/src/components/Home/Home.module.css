@@ -1,0 +1,177 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  height: 100vh;
+  width: 100%;
+  padding: 20px;
+
+}
+
+.leftContent,
+.rightContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.leftContent {
+  text-align: left;
+  margin-top: 50px;
+  padding: 10px;
+}
+
+.rightContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.image {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px black;
+}
+
+.image:hover {
+  scale: 1.2;
+}
+
+.heading {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  background-color: rgb(88, 4, 118);
+  box-shadow: 0 4px 10px black;
+  border-radius: 10px;
+  padding: 5px 10px;
+  color: #fff;
+}
+
+.subtext {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  background-color: rgb(194, 96, 255);
+  box-shadow: 0 4px 10px black;
+  border-radius: 10px;
+  padding: 5px 10px;
+  color: #fff;
+}
+
+.featureList {
+  list-style-type: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.featureItem {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  margin: 10px 0;
+  color: #444;
+  background-color: rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 10px black;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.icon {
+  color: rgb(96, 181, 255);
+  margin-right: 10px;
+}
+
+.startButton {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: #fff;
+  background-color: rgb(88, 4, 118);
+  border: 2px solid beige;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.3s;
+  box-shadow: 0 4px 10px black;
+}
+
+.startButton:hover {
+  transform: scale(1.1);
+}
+
+.messageIcon {
+  margin-left: 10px;
+}
+
+@media (max-width: 599px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .heading {
+    font-size: 1.8rem;
+  }
+
+  .subtext {
+    font-size: 1rem;
+  }
+
+  .startButton {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+  }
+
+  .leftContent,
+  .rightContent {
+    width: 100%;
+    padding: 0;
+  }
+
+  .featureItem {
+    font-size: 0.9rem;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 899px) {
+  .heading {
+    font-size: 2.2rem;
+  }
+
+  .subtext {
+    font-size: 1.1rem;
+  }
+
+  .startButton {
+    font-size: 0.95rem;
+    padding: 9px 18px;
+  }
+
+  .featureItem {
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 900px) {
+  .heading {
+    font-size: 2.5rem;
+  }
+
+  .subtext {
+    font-size: 1.2rem;
+  }
+
+  .startButton {
+    font-size: 1rem;
+    padding: 10px 20px;
+  }
+
+  .featureItem {
+    font-size: 1.1rem;
+  }
+}

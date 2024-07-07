@@ -39,7 +39,7 @@ export default function Signin() {
       const { token, user } = await response.json();
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
-      navigate("/dashboard");
+      navigate("/tasks");
     } catch (error) {
       setMessage(`Error: ${error.message}`);
     } finally {
